@@ -11,7 +11,9 @@ import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
-import moreRouter from './modules/more'
+import meetingRouter from './modules/pro-meeting'
+import messageRouter from './modules/pro-message'
+import basicInfoRouter from './modules/pro-basic-info'
 
 /**
  * Note: 路由配置项
@@ -191,6 +193,9 @@ export const asyncRoutes = [
   // nestedRouter,
   // tableRouter,
   // ...moreRouter,
+  meetingRouter,
+  messageRouter,
+  basicInfoRouter,
 
 
   // 404 page must be placed at the end !!!

@@ -8,7 +8,7 @@
         :background-color="variables.menuBg"
         :text-color="variables.menuText"
         :unique-opened="false"
-        :active-text-color="variables.menuActiveText"
+        :active-text-color="activeColor"
         :collapse-transition="false"
         mode="vertical"
       >
@@ -26,6 +26,11 @@ import variables from '@/styles/variables.scss'
 
 export default {
   components: { SidebarItem, Logo },
+  data() {
+    return {
+      activeColor: ''
+    }
+  },
   computed: {
     ...mapGetters([
       'permission_routes',
@@ -48,7 +53,18 @@ export default {
     },
     isCollapse() {
       return !this.sidebar.opened
+    },
+    themeColor() {
+      return this.$store.state.settings.theme
     }
-  }
+  },
+  mounted() {
+    this.activeColor = this.themeColor
+  },
+  watch: {
+    themeColor(val) {
+      this.activeColor = val
+    }
+  },
 }
 </script>
