@@ -18,8 +18,7 @@ export default {
     key() {
       return this.$route.path
     }
-  },
-  mounted() {}
+  }
 }
 </script>
 

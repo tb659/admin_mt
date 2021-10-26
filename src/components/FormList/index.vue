@@ -81,10 +81,8 @@ export default {
 
   mounted() {
     // console.log('form-list mounted')
-
+    // 初始化表单数据
     this.formList = this.loadFormItems()
-    // console.log(this.$refs.form.clientHeight)
-    this.$store.commit('common/SET_FORM_HEIGHT', this.$refs.form.clientHeight)
   },
 
   methods: {
