@@ -1,0 +1,13 @@
+@import './mixin.scss';
+
+// 引用图片路径
+$path: '~@/assets/images';
+
+// .login {
+// $w: 100vw;
+// $h: 100vh;
+
+// width: $w;
+// height: $h;
+// @include imgRetina('#{$path}/timg', jpg, $w, $h, no-repeat, center);
+// }

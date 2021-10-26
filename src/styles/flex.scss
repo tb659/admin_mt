@@ -1,0 +1,413 @@
+// Flexbox Mixins
+// http://philipwalton.github.io/solved-by-flexbox/
+// https://github.com/philipwalton/solved-by-flexbox
+//
+// Copyright (c) 2013 Brian Franco
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+// CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+// This is a set of mixins for those who want to mess around with flexbox
+// using the native support of current browsers. For full support table
+// check: http://caniuse.com/flexbox
+//
+// Basically this will use:
+//
+// * Fallback, old syntax (IE10, mobile webkit browsers - no wrapping)
+// * Final standards syntax (FF, Safari, Chrome, IE11, Opera)
+//
+// This was inspired by:
+//
+// * http://dev.opera.com/articles/view/advanced-cross-browser-flexbox/
+//
+// With help from:
+//
+// * http://w3.org/tr/css3-flexbox/
+// * http://the-echoplex.net/flexyboxes/
+// * http://msdn.microsoft.com/en-us/library/ie/hh772069(v=vs.85).aspx
+// * http://css-tricks.com/using-flexbox/
+// * http://dev.opera.com/articles/view/advanced-cross-browser-flexbox/
+// * https://developer.mozilla.org/en-us/docs/web/guide/css/flexible_boxes
+
+//----------------------------------------------------------------------
+
+// Flexbox Containers
+//
+// “flex”值使元素生成块级flex容器盒。
+//
+// 'inline-flex'值使元素生成一个内联级伸缩容器盒。
+//
+// display: flex | inline-flex
+//
+// http://w3.org/tr/css3-flexbox/#flex-containers
+//
+// (Placeholder selectors for each type, for those who rather @extend)
+
+// flexbox
+
+// inline-flex
+
+// flex-direction		flex-dir
+
+// flex-wrap
+
+// justify-content		flex-just
+
+// align-items
+
+// flex
+
+// flex-grow
+
+// flex-flow
+
+// flex-shrink
+
+// flex-basis
+
+// order
+
+// align-self
+
+// align-content
+
+@mixin flexbox {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+%flexbox {
+  @include flexbox;
+}
+
+//----------------------------------
+
+@mixin inline-flex {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -moz-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+%inline-flex {
+  @include inline-flex;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Direction
+//
+// “flex-direction”属性指定了flex项目的放置方式伸缩容器，
+// 通过设置伸缩容器的方向主要轴。这决定了伸缩项的布局方向。
+//
+// Values: row | row-reverse | column | column-reverse
+// Default: row
+//
+// http://w3.org/tr/css3-flexbox/#flex-direction-property
+
+@mixin flex-direction($value: row) {
+  @if $value == row-reverse {
+    -webkit-box-direction: reverse;
+    -webkit-box-orient: horizontal;
+  } @else if $value == column {
+    -webkit-box-direction: normal;
+    -webkit-box-orient: vertical;
+  } @else if $value == column-reverse {
+    -webkit-box-direction: reverse;
+    -webkit-box-orient: vertical;
+  } @else {
+    -webkit-box-direction: normal;
+    -webkit-box-orient: horizontal;
+  }
+  -webkit-flex-direction: $value;
+  -moz-flex-direction: $value;
+  -ms-flex-direction: $value;
+  flex-direction: $value;
+}
+// Shorter version:
+@mixin flex-dir($args...) {
+  @include flex-direction($args...);
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Wrap
+//
+// flex-wrap属性控制flex容器是否为单行或多线，并与交叉轴的方向，
+// 确定新行堆放的方向。
+//
+// Values: nowrap | wrap | wrap-reverse
+// Default: nowrap
+//
+// http://w3.org/tr/css3-flexbox/#flex-wrap-property
+
+@mixin flex-wrap($value: nowrap) {
+  // No Webkit Box fallback.
+  -webkit-flex-wrap: $value;
+  -moz-flex-wrap: $value;
+  @if $value == nowrap {
+    -ms-flex-wrap: none;
+  } @else {
+    -ms-flex-wrap: $value;
+  }
+  flex-wrap: $value;
+}
+//----------------------------------------------------------------------
+
+// Flexbox Justify Content
+//
+// 伸缩容器的当前行。这是做后任意灵活长度和任何汽车利润已经解决。
+// 通常它有助于分发当一行上的所有伸缩项都是不灵活的，或灵活的，但已达到其最大大小。
+// 它还当项目溢出行时，对它们的对齐施加一些控制。
+//
+// 注意:'空格-*'值在旧的语法中不支持。
+//
+// Values: flex-start | flex-end | center | space-between | space-around
+// Default: space-between
+//
+// http://w3.org/tr/css3-flexbox/#justify-content-property
+
+@mixin justify-content($value: space-between) {
+  @if $value == flex-start {
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+  } @else if $value == flex-end {
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+  } @else if $value == space-between {
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+  } @else if $value == space-around {
+    -ms-flex-pack: distribute;
+  } @else {
+    -webkit-box-pack: $value;
+    -ms-flex-pack: $value;
+  }
+  -webkit-justify-content: $value;
+  -moz-justify-content: $value;
+  justify-content: $value;
+}
+// Shorter version:
+@mixin flex-just($args...) {
+  @include justify-content($args...);
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Align Items
+//
+// 伸缩项可以在当前行的横轴上对齐伸缩容器，类似于'justify-content'，但垂直于方向。'align-items'设置所有flex的默认对齐方式
+// 容器的条目，包括匿名的flex条目。“align-self”允许这个默认的对齐方式将被每个flex项目覆盖。
+// (匿名伸缩项，'align-self'总是匹配'align-items'的值在它们关联的flex容器上。)
+//
+// Values: flex-start | flex-end | center | baseline | stretch
+// Default: center
+//
+// http://w3.org/tr/css3-flexbox/#align-items-property
+
+@mixin align-items($value: center) {
+  @if $value == flex-start {
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+  } @else if $value == flex-end {
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+  } @else {
+    -webkit-box-align: $value;
+    -ms-flex-align: $value;
+  }
+  -webkit-align-items: $value;
+  -moz-align-items: $value;
+  align-items: $value;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox "Flex" (shorthand)
+//
+// 'flex'属性指定一个灵活长度的组件伸缩生长因子和伸缩收缩因子，以及伸缩基础。
+// 当一个元素是一个伸缩项，使用“伸缩”代替主大小属性，以确定元素的主大小。
+// 如果元素不是伸缩项目，'flex'没有效果。
+//
+// Values: none | <flex-grow> <flex-shrink> || <flex-basis>
+// Default: See individual properties (1 1 0).
+//
+// http://w3.org/tr/css3-flexbox/#flex-property
+
+@mixin flex($fg: 1, $fs: null, $fb: null) {
+  // 设置一个用于box-flex属性的变量
+
+  $fg-boxflex: $fg;
+
+  // Box-Flex只支持flex-grow值，所以让我们抓取返回列表的第一项。
+  @if type-of($fg) == 'list' {
+    $fg-boxflex: nth($fg, 1);
+  }
+
+  -webkit-box-flex: $fg-boxflex;
+  -webkit-flex: $fg $fs $fb;
+  -moz-box-flex: $fg-boxflex;
+  -moz-flex: $fg $fs $fb;
+  -ms-flex: $fg $fs $fb;
+  flex: $fg $fs $fb;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Grow
+//
+// “flex-grow”属性设置flex增长因子。负数无效
+//
+// Default: 0
+//
+// http://w3.org/tr/css3-flexbox/#flex-grow-property
+
+@mixin flex-grow($int: 0) {
+  -webkit-box-flex: $int;
+  -webkit-flex-grow: $int;
+  -moz-flex-grow: $int;
+  -ms-flex-positive: $int;
+  flex-grow: $int;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Flow (shorthand)
+//
+// “flex-flow”属性是设置“flex-direction”的简写和'flex-wrap'属性，
+// 它们一起定义了flex容器的主轴和十字轴。
+//
+// Values: <flex-direction> | <flex-wrap>
+// Default: row nowrap
+//
+// http://w3.org/tr/css3-flexbox/#flex-flow-property
+
+@mixin flex-flow(
+  $values: (
+    row nowrap
+  )
+) {
+  // No Webkit Box fallback.
+  -webkit-flex-flow: $values;
+  -moz-flex-flow: $values;
+  -ms-flex-flow: $values;
+  flex-flow: $values;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Shrink
+//
+// “伸缩收缩”属性设置伸缩收缩系数。负数无效
+//
+// Default: 1
+//
+// http://w3.org/tr/css3-flexbox/#flex-shrink-property
+
+@mixin flex-shrink($int: 1) {
+  -webkit-flex-shrink: $int;
+  -moz-flex-shrink: $int;
+  -ms-flex-negative: $int;
+  flex-shrink: $int;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Basis
+//
+// “flex-basis”属性设置flex基础。 负长度无效。
+//
+// Values: Like "width"
+// Default: auto
+//
+// http://www.w3.org/TR/css3-flexbox/#flex-basis-property
+
+@mixin flex-basis($value: auto) {
+  -webkit-flex-basis: $value;
+  -moz-flex-basis: $value;
+  -ms-flex-preferred-size: $value;
+  flex-basis: $value;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Order
+//
+// “order”属性控制flex项出现的顺序它们的伸缩容器，通过将它们分配给序数组。
+//
+// Default: 0
+//
+// http://w3.org/tr/css3-flexbox/#order-property
+
+@mixin order($int: 0) {
+  -webkit-box-ordinal-group: $int + 1;
+  -webkit-order: $int;
+  -moz-order: $int;
+  -ms-flex-order: $int;
+  order: $int;
+}
+
+//----------------------------------
+
+// Flexbox调整自我
+//
+// Values: auto | flex-start | flex-end | center | baseline | stretch
+// Default: auto
+
+@mixin align-self($value: auto) {
+  // No Webkit Box Fallback.
+  -webkit-align-self: $value;
+  -moz-align-self: $value;
+  @if $value == flex-start {
+    -ms-flex-item-align: start;
+  } @else if $value == flex-end {
+    -ms-flex-item-align: end;
+  } @else {
+    -ms-flex-item-align: $value;
+  }
+  align-self: $value;
+}
+
+//----------------------------------------------------------------------
+
+// flex对齐内容
+//
+// 属性'align-content'对flex容器中的行进行对齐伸缩容器在交叉轴上有额外的空间时，
+// 类似于“justify-content”如何在主轴内对齐单个条目。请注意,当flex只有一条线时，此属性没有作用。
+
+// Values: flex-start | flex-end | center | space-between | space-around | stretch
+// Default: stretch
+//
+// http://w3.org/tr/css3-flexbox/#align-content-property
+
+@mixin align-content($value: stretch) {
+  // 没有Webkit Box后备方案。
+  -webkit-align-content: $value;
+  -moz-align-content: $value;
+  @if $value == flex-start {
+    -ms-flex-line-pack: start;
+  } @else if $value == flex-end {
+    -ms-flex-line-pack: end;
+  } @else {
+    -ms-flex-line-pack: $value;
+  }
+  align-content: $value;
+}

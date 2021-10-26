@@ -1,5 +1,7 @@
 // import parseTime, formatTime and set to filter
 export { parseTime, formatTime } from '@/utils'
+import defaultSettings from '@/settings'
+import { getToken } from '@/utils/auth'
 
 /**
  * Show plural label if time is plural number
@@ -65,4 +67,13 @@ export function toThousandFilter(num) {
  */
 export function uppercaseFirst(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+/**
+ * @description: 
+ * @param {*}
+ * @return {*}
+ */
+export const getImgUrl = (val) => {
+  return `${defaultSettings.picDownLoadUrl + val}&Authorization=${getToken('token')}`
 }

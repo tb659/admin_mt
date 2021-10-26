@@ -23,9 +23,9 @@ const store = new Vuex.Store({
   getters,
   
   // 存储到 localStorege
-	// plugins: [createPersistedState({
-	// 	storage: window.sessionStorage
-	// })]
+	plugins: [createPersistedState({
+		storage: window.sessionStorage
+	})]
 })
 
 export default store

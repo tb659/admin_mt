@@ -1,5 +1,5 @@
 <template>
-  <section class="app-main">
+  <section class="app-main" ref="appMain">
     <transition name="fade-transform" mode="out-in">
       <keep-alive :include="cachedViews">
         <router-view :key="key" />
@@ -18,7 +18,8 @@ export default {
     key() {
       return this.$route.path
     }
-  }
+  },
+  mounted() {}
 }
 </script>
 
@@ -31,7 +32,7 @@ export default {
   overflow: hidden;
 }
 
-.fixed-header+.app-main {
+.fixed-header + .app-main {
   padding-top: 50px;
 }
 
@@ -41,7 +42,7 @@ export default {
     min-height: calc(100vh - 84px);
   }
 
-  .fixed-header+.app-main {
+  .fixed-header + .app-main {
     padding-top: 84px;
   }
 }

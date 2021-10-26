@@ -1,14 +1,35 @@
-@mixin clearfix {
-  &:after {
-    content: "";
-    display: table;
-    clear: both;
+@import './flex.scss';
+
+// 背景图片引入方法 根据机型切换2x
+@mixin imgRetina($image, $extension, $width, $height, $repeat: no-repeat, $position: center) {
+  background: url($image+'.'+$extension) $repeat $position;
+
+  @media screen and (-webkit-min-device-pixel-ratio: 2),
+    screen and (min--moz-device-pixel-ratio: 2),
+    screen and (-moz-min-device-pixel-ratio: 2),
+    screen and (-o-min-device-pixel-ratio: 2/1),
+    screen and (min-device-pixel-ratio: 2),
+    screen and (min-resolution: 192dpi),
+    screen and (min-resolution: 2dppx) {
+    // background: url($image+'@2x'+'.'+$extension) $repeat $position;
+    background-size: $width $height;
   }
 }
 
-@mixin scrollBar {
+// 使用rem设置字体尺寸并使用像素进行回退
+@function calculateRem($size) {
+  $remSize: $size / 16px;
+  @return $remSize * 1rem;
+}
+
+@mixin font-size($size) {
+  font-size: $size;
+  font-size: calculateRem($size);
+}
+
+@mixin scrollBarY {
   &::-webkit-scrollbar-track-piece {
-    background: #d3dce6;
+    background: $scrollBarBg;
   }
 
   &::-webkit-scrollbar {
@@ -16,7 +37,22 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #99a9bf;
+    background: $scrollBarActive;
+    border-radius: 20px;
+  }
+}
+
+@mixin scrollBarX {
+  &::-webkit-scrollbar-track-piece {
+    background: $scrollBarBg;
+  }
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $scrollBarActive;
     border-radius: 20px;
   }
 }
@@ -25,12 +61,6 @@
   position: relative;
   width: 100%;
   height: 100%;
-}
-
-@mixin pct($pct) {
-  width: #{$pct};
-  position: relative;
-  margin: 0 auto;
 }
 
 @mixin triangle($width, $height, $color, $direction) {
@@ -44,23 +74,85 @@
     border-bottom: $color-border-style;
     border-left: $transparent-border-style;
     border-right: $transparent-border-style;
-  }
-
-  @else if $direction==right {
+  } @else if $direction==right {
     border-left: $color-border-style;
     border-top: $transparent-border-style;
     border-bottom: $transparent-border-style;
-  }
-
-  @else if $direction==down {
+  } @else if $direction==down {
     border-top: $color-border-style;
     border-left: $transparent-border-style;
     border-right: $transparent-border-style;
-  }
-
-  @else if $direction==left {
+  } @else if $direction==left {
     border-right: $color-border-style;
     border-top: $transparent-border-style;
     border-bottom: $transparent-border-style;
   }
+}
+
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: '';
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+// 圆角边框
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+//文本n行溢出隐藏
+@mixin ellipsisBasic($clamp: 2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $clamp;
+}
+
+@mixin border-radius($radius: 0) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+// 定位水平垂直都居中
+@mixin positionXYCenter() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// 定位水平居中
+@mixin positionXCenter() {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+// 定位垂直居中
+@mixin positionYCenter() {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@mixin positionTop() {
+  position: absolute;
+  top: 0%;
+  transform: translateY(-0%);
+}
+@mixin positionBottom() {
+  position: absolute;
+  top: 75%;
+  transform: translateY(-50%);
 }

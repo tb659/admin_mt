@@ -1,3 +1,4 @@
+const url = 'https://www.ericei.com/meetingx'
 module.exports = {
   title: 'Admin MT',
 
@@ -37,5 +38,9 @@ module.exports = {
    * The default is only used in the production env
    * If you want to also use it in dev, you can pass ['production', 'development']
    */
-  errorLog: 'production'
+  errorLog: 'production',
+
+  baseUrl: url,
+
+  picDownLoadUrl: url + '/api/file/download?filename='
 }

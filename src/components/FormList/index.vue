@@ -1,13 +1,12 @@
 <template>
-  <section>123
-    <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      {{ formList }}
+  <section class="form-container" ref="form">
+    <el-form inline :model="ruleForm" ref="ruleForm" label-width="90px" class="demo-ruleForm">
       <el-form-item :label="form.label" :prop="form.prop" v-for="form in formList" :key="form.id">
         <!-- 输入框 -->
         <el-input v-if="form.type === 'input-text'" v-model="form.prop" :placeholder="form.placeholder"></el-input>
 
         <!-- 下拉框 -->
-        <el-select v-else-if="form.type === 'select'" v-model="form.prop" :placeholder="form.placeholder">
+        <el-select v-else-if="form.type === 'select'" v-model="ruleForm[form.prop]" :placeholder="form.placeholder" clearable>
           <el-option :label="option.label" :value="option.value" v-for="option in form.selectData" :key="option.label"></el-option>
         </el-select>
       </el-form-item>
@@ -51,8 +50,9 @@
         <el-input type="textarea" v-model="ruleForm.desc"></el-input>
       </el-form-item> -->
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="submitForm(ruleForm)">搜索</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <el-button icon="el-icon-plus" @click="add">新增</el-button>
       </el-form-item>
     </el-form>
   </section>
@@ -61,28 +61,40 @@
 <script>
 export default {
   name: 'FormList',
+  props: {
+    submitForm: {
+      type: Function,
+      default: () => () => {}
+    },
+    add: {
+      type: Function,
+      default: () => () => {}
+    }
+  },
   data() {
     return {
       ruleForm: {},
-      formList: []
+      formList: [],
+      formHeight: 0
     }
   },
 
   mounted() {
-    console.log('form-list mounted')
+    // console.log('form-list mounted')
 
-    // 初始化表单数据
     this.formList = this.loadFormItems()
+    // console.log(this.$refs.form.clientHeight)
+    this.$store.commit('common/SET_FORM_HEIGHT', this.$refs.form.clientHeight)
   },
 
   methods: {
     /**
-     * @description: 查询条件提交
+     * @description: 初始化表单数据
      * @param {*}
      * @return {*}
      */
-    submitForm() {
-      //
+    loadFormItems() {
+      return []
     },
 
     /**
@@ -90,20 +102,20 @@ export default {
      * @param {*}
      * @return {*}
      */
-    resetForm() {
-      //
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
     }
   },
-  watch: {
-    formList(val) {
-      console.log(val)
-      // this.formList = val
-      // this.formList.forEach(form => {
-      //   this.ruleForm[form.prop] = ''
-      // })
-    }
-  }
+  watch: {}
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.form-container {
+  padding: 10px;
+
+  .el-form-item {
+    margin-bottom: 0;
+  }
+}
+</style>
