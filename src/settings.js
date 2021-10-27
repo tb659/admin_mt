@@ -18,7 +18,7 @@ module.exports = {
    * @type {boolean} true | false
    * @description Whether fix the header
    */
-  fixedHeader: false,
+  fixedHeader: true,
 
   /**
    * @type {boolean} leftRight | topLeftRight
@@ -39,6 +39,10 @@ module.exports = {
    * If you want to also use it in dev, you can pass ['production', 'development']
    */
   errorLog: 'production',
+
+  headerBarH: 50,
+  tagToolBarH: 34,
+  pageToolBarH: 42,
 
   baseUrl: url,
 

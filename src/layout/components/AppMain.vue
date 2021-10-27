@@ -19,7 +19,9 @@ export default {
       return this.$route.path
     }
   },
-  mounted() {}
+  mounted() {
+    this.$store.commit('common/SET_TABLE_HEIGHT', this.$refs.appMain.clientHeight)
+  }
 }
 </script>
 
